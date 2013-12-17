@@ -4,7 +4,7 @@ public class ScriptFile {
 
     private String id;
     private String name;
-    private String type;
+    private ScriptFileType type;
     private String source;
 
     public String getId() {
@@ -23,12 +23,12 @@ public class ScriptFile {
         this.name = name;
     }
 
-    public String getType() {
+    public ScriptFileType getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = ScriptFileType.getType(type);
     }
 
     public String getSource() {

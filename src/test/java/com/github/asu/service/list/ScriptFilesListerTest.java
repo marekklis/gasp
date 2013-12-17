@@ -11,10 +11,10 @@ import static org.testng.Assert.assertEquals;
 
 public class ScriptFilesListerTest {
 
-    @Test
+    @Test(enabled = false)
     public void shouldListProjectFiles() throws MojoExecutionException {
         // given
-        String accessToken = "ya29.1.AADtN_WdoWXGe3pc08BJH6_H_ItR_9PqLXCPWbHX_4uVo_E1qfULauECtCq9QA67iUMICQ";
+        String accessToken = "ya29.1.AADtN_UwXi2p4kXAcBlQZJrB9BUyNJQIiECO0lTj4z3g_OdBUYqumG6V6JUwNJtbCMyv2w";
         String projectId = "1g502drF5fuEA4TKhgrziybO02iTuuvfHXb3UeurCLbCChbpYOBjwfwbz";
         RestTemplate restTemplate = new RestTemplateProvider().provide();
         HttpHeaders headers = new HttpHeaderProvider(accessToken).provide();

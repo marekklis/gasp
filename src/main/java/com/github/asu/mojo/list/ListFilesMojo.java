@@ -26,7 +26,7 @@ public class ListFilesMojo extends AbstractMojo {
         ScriptFilesLister lister = new ScriptFilesLister(restTemplate, httpHeaders);
         ScriptFiles files = lister.listFiles(projectId);
         for (ScriptFile file : files.getFiles()) {
-            getLog().info(file.getName());
+            getLog().info(file.getName() + "." + file.getType().getExtension());
         }
     }
 
