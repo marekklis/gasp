@@ -1,4 +1,4 @@
-package com.github.asu.upload;
+package com.github.asu.mojo.upload;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;

@@ -15,10 +15,17 @@
     </properties>
 
     <dependencies>
+        <!--REST Template-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>org.springframework.web</artifactId>
             <version>3.2.0.RELEASE</version>
+        </dependency>
+        <!-- Jackson (for JSON mappings in Spring MVC) -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.9</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
