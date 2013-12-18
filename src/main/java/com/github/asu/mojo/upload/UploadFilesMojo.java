@@ -1,5 +1,6 @@
 package com.github.asu.mojo.upload;
 
+import com.github.asu.service.upload.ScriptFilesUploader;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -14,20 +15,7 @@ public class UploadFilesMojo extends AbstractMojo {
     private File scriptsDir;
 
     public void execute() throws MojoExecutionException {
-        File f = scriptsDir;
-
-        if (f.exists()) {
-            getLog().info("------- files to upload ------");
-            for (File file : f.listFiles()) {
-                if (file.isFile()) {
-                    getLog().info("file: " + file.getName());
-                } else if (file.isDirectory()) {
-                    getLog().info("dir : " + file.getName());
-                }
-            }
-            getLog().info("--------------------------");
-        } else {
-            getLog().error("script files folder not exists!!");
-        }
+        ScriptFilesUploader uploader = new ScriptFilesUploader();
+        uploader.upload(scriptsDir);
     }
 }
