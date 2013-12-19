@@ -20,7 +20,6 @@ import testng.MockitoTestNGListener;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +58,15 @@ public class ScriptFilesUploaderTest {
     private static final String FILE_1_ID = "file 1 id";
     private static final String FILE_1_NAME = "file 1 name";
     private static final ScriptFileType FILE_1_TYPE = ScriptFileType.JAVASCRIPT;
+    private static final String FILE_1_CONTENT = "file 1 content";
     private static final String FILE_2_ID = "file 2 id";
     private static final String FILE_2_NAME = "file 2 name";
     private static final ScriptFileType FILE_2_TYPE = ScriptFileType.HTML;
+    private static final String FILE_2_CONTENT = "file 2 content";
     private ScriptFile scriptFile1;
     private ScriptFile scriptFile2;
     private URI uploadUri;
+    private List<String> ignoredFiles;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -73,21 +75,22 @@ public class ScriptFilesUploaderTest {
         given(sourceDir.isDirectory()).willReturn(true);
         given(file1.getName()).willReturn(FILE_1_NAME + "." + FILE_1_TYPE.getExtension());
         given(file2.getName()).willReturn(FILE_2_NAME + "." + FILE_2_TYPE.getExtension());
-        scriptFile1 = givenScript(FILE_1_ID, FILE_1_NAME, FILE_1_TYPE);
-        scriptFile2 = givenScript(FILE_2_ID, FILE_2_NAME, FILE_2_TYPE);
+        scriptFile1 = givenScript(FILE_1_ID, FILE_1_NAME, FILE_1_TYPE, FILE_1_CONTENT);
+        scriptFile2 = givenScript(FILE_2_ID, FILE_2_NAME, FILE_2_TYPE, FILE_2_CONTENT);
         given(scriptFileBuilder.build(file1)).willReturn(scriptFile1);
         given(scriptFileBuilder.build(file2)).willReturn(scriptFile2);
+        ignoredFiles = new ArrayList<String>();
         uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, downloader, PROJECT_ID, scriptFileBuilder);
         uploadUri = new URI("https://www.googleapis.com/upload/drive/v2/files/" + PROJECT_ID);
     }
 
     @Test
-    public void shouldUploadExistingFiles() throws URISyntaxException {
+    public void shouldUploadExistingFiles() {
         // given
         given(downloader.download(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
         given(sourceDir.listFiles()).willReturn(files(file1, file2));
         // when
-        uploader.upload(sourceDir);
+        uploader.upload(sourceDir, ignoredFiles);
         // then
         verify(downloader).download(PROJECT_ID);
         verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
@@ -103,12 +106,12 @@ public class ScriptFilesUploaderTest {
     }
 
     @Test
-    public void shouldUploadNotExistingFileWithEmptyId() throws URISyntaxException {
+    public void shouldUploadNotExistingFileWithEmptyId() {
         // given
         given(downloader.download(PROJECT_ID)).willReturn(givenScripts(new ArrayList<ScriptFile>()));
         given(sourceDir.listFiles()).willReturn(files(file1));
         // when
-        uploader.upload(sourceDir);
+        uploader.upload(sourceDir, ignoredFiles);
         // then
         verify(downloader).download(PROJECT_ID);
         verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
@@ -120,16 +123,40 @@ public class ScriptFilesUploaderTest {
         assertEquals(files.get(0).getId(), "");
     }
 
+    @Test
+    public void shouldNotDeleteExcludedFiles() {
+        // given
+        given(downloader.download(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
+        given(sourceDir.listFiles()).willReturn(files(file1));
+        ignoredFiles = newArrayList(FILE_2_NAME + "." + FILE_2_TYPE.getExtension());
+        // when
+        uploader.upload(sourceDir, ignoredFiles);
+        // then
+        verify(downloader).download(PROJECT_ID);
+        verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
+        ScriptFiles request = requestCaptor.getValue().getBody();
+        List<ScriptFile> files = request.getFiles();
+        assertEquals(files.size(), 2);
+        assertEquals(files.get(0).getId(), FILE_1_ID);
+        assertEquals(files.get(0).getName(), FILE_1_NAME);
+        assertEquals(files.get(0).getFileType(), FILE_1_TYPE);
+        assertEquals(files.get(0).getSource(), FILE_1_CONTENT);
+        assertEquals(files.get(1).getId(), FILE_2_ID);
+        assertEquals(files.get(1).getName(), FILE_2_NAME);
+        assertEquals(files.get(1).getFileType(), FILE_2_TYPE);
+        assertEquals(files.get(1).getSource(), FILE_2_CONTENT);
+    }
+
     private File[] files(File... files) {
         return newArrayList(files).toArray(new File[files.length]);
     }
 
-    private ScriptFile givenScript(String id, String name, ScriptFileType type) {
+    private ScriptFile givenScript(String id, String name, ScriptFileType type, String content) {
         ScriptFile scriptFile = new ScriptFile();
         scriptFile.setId(id);
         scriptFile.setName(name);
         scriptFile.setFileType(type);
-        scriptFile.setSource("some source");
+        scriptFile.setSource(content);
         return scriptFile;
     }
 

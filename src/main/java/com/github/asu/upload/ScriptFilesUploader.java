@@ -33,20 +33,40 @@ public class ScriptFilesUploader {
         this.scriptFileBuilder = scriptFileBuilder;
     }
 
-    public void upload(File sourceDir) {
+    public void upload(File sourceDir, List<String> ignoredFiles) {
+//        checkArgument(sourceDir.isDirectory(), "downloadDir is not a directory");
         ScriptFiles scriptFiles = downloader.download(projectId);
+        List<ScriptFile> filesToUpload = new ArrayList<ScriptFile>();
+        filesToUpload.addAll(prepareFilesToUpload(sourceDir, ignoredFiles, scriptFiles));
+        filesToUpload.addAll(sendBackIgnoredFiles(ignoredFiles, scriptFiles));
+        ScriptFiles request = new ScriptFiles();
+        request.setFiles(filesToUpload);
+        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headersProvider.provide());
+        restTemplateProvider.provide().put(uploadPath(projectId), requestEntity);
+    }
+
+    private List<ScriptFile> prepareFilesToUpload(File sourceDir, List<String> ignoredFiles, ScriptFiles scriptFiles) {
         List<ScriptFile> toUpload = new ArrayList<ScriptFile>();
-        if (sourceDir.isDirectory()) {
-            for (File file : sourceDir.listFiles()) {
+        for (File file : sourceDir.listFiles()) {
+            if (!ignoredFiles.contains(file.getName())) {
                 ScriptFile scriptFile = scriptFileBuilder.build(file);
                 scriptFile.setId(findId(scriptFiles, scriptFile.getName(), scriptFile.getFileType()));
                 toUpload.add(scriptFile);
             }
         }
-        ScriptFiles request = new ScriptFiles();
-        request.setFiles(toUpload);
-        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headersProvider.provide());
-        restTemplateProvider.provide().put(uploadPath(projectId), requestEntity);
+        return toUpload;
+    }
+
+    private List<ScriptFile> sendBackIgnoredFiles(List<String> ignoredFiles, ScriptFiles scriptFiles) {
+        List<ScriptFile> toSendBack = new ArrayList<ScriptFile>();
+        for (String ignoredFile : ignoredFiles) {
+            for (ScriptFile scriptFile : scriptFiles.getFiles()) {
+                if (scriptFile.fileName().equals(ignoredFile)) {
+                    toSendBack.add(scriptFile);
+                }
+            }
+        }
+        return toSendBack;
     }
 
     private URI uploadPath(String projectId) {

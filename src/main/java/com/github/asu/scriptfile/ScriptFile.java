@@ -53,6 +53,10 @@ public class ScriptFile {
         this.source = source;
     }
 
+    public String fileName() {
+        return name + "." + fileType.getExtension();
+    }
+
     @Override
     public String toString() {
         return "ScriptFile{" +

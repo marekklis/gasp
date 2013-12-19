@@ -11,12 +11,15 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.List;
 
 @Mojo(name = "upload")
 public class UploadFilesMojo extends AbstractMojo {
 
     @Parameter(property = "scriptsDir", required = true)
     private File scriptsDir;
+    @Parameter(property = "ignoredFiles", required = false)
+    private List<String> ignoredFiles;
     @Parameter(property = "projectId", required = true)
     private String projectId;
     @Parameter(property = "accessToken", required = true)
@@ -28,6 +31,11 @@ public class UploadFilesMojo extends AbstractMojo {
         ScriptFilesDownloader downloader = new ScriptFilesDownloader(restTemplateProvider, headersProvider);
         ScriptFileBuilder scriptFileBuilder = new ScriptFileBuilder();
         ScriptFilesUploader uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, downloader, projectId, scriptFileBuilder);
-        uploader.upload(scriptsDir);
+        uploader.upload(scriptsDir, ignoredFiles);
+        getLog().info("----- excluded files ------");
+        for (String ignoredFile : ignoredFiles) {
+            getLog().info(ignoredFile);
+        }
+        getLog().info("---------------------------");
     }
 }
