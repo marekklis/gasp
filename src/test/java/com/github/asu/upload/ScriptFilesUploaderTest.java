@@ -26,6 +26,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
 
@@ -145,6 +146,19 @@ public class ScriptFilesUploaderTest {
         assertEquals(files.get(1).getName(), FILE_2_NAME);
         assertEquals(files.get(1).getFileType(), FILE_2_TYPE);
         assertEquals(files.get(1).getSource(), FILE_2_CONTENT);
+    }
+
+    @Test
+    public void shouldNotOverrideExcludedFileContent() {
+        // given
+        given(downloader.download(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
+        given(sourceDir.listFiles()).willReturn(files(file1, file2));
+        ignoredFiles = newArrayList(FILE_2_NAME + "." + FILE_2_TYPE.getExtension());
+        // when
+        uploader.upload(sourceDir, ignoredFiles);
+        // then
+        verify(scriptFileBuilder).build(file1);
+        verify(scriptFileBuilder, never()).build(file2);
     }
 
     private File[] files(File... files) {
