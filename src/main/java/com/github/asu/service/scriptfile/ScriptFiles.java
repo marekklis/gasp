@@ -1,4 +1,4 @@
-package com.github.asu.service.list;
+package com.github.asu.service.scriptfile;
 
 import java.util.List;
 
@@ -12,5 +12,12 @@ public class ScriptFiles {
 
     public void setFiles(List<ScriptFile> files) {
         this.files = files;
+    }
+
+    @Override
+    public String toString() {
+        return "ScriptFiles{" +
+                "files=" + files +
+                '}';
     }
 }

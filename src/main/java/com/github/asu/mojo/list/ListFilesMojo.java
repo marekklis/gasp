@@ -1,10 +1,10 @@
 package com.github.asu.mojo.list;
 
 import com.github.asu.service.header.HttpHeaderProvider;
-import com.github.asu.service.list.ScriptFile;
-import com.github.asu.service.list.ScriptFiles;
 import com.github.asu.service.list.ScriptFilesLister;
 import com.github.asu.service.rest.RestTemplateProvider;
+import com.github.asu.service.scriptfile.ScriptFile;
+import com.github.asu.service.scriptfile.ScriptFiles;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -26,7 +26,7 @@ public class ListFilesMojo extends AbstractMojo {
         ScriptFilesLister lister = new ScriptFilesLister(restTemplate, httpHeaders);
         ScriptFiles files = lister.listFiles(projectId);
         for (ScriptFile file : files.getFiles()) {
-            getLog().info(file.getName() + "." + file.getType().getExtension());
+            getLog().info(file.getName() + "." + file.getFileType().getExtension());
         }
     }
 

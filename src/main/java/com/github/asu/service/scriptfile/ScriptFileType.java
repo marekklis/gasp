@@ -1,4 +1,4 @@
-package com.github.asu.service.list;
+package com.github.asu.service.scriptfile;
 
 public enum ScriptFileType {
 
@@ -22,12 +22,21 @@ public enum ScriptFileType {
         return extension;
     }
 
-    public static final ScriptFileType getType(String description) {
+    public static final ScriptFileType typeByDesc(String description) {
         for (ScriptFileType type : values()) {
             if (type.description.equals(description)) {
                 return type;
             }
         }
         throw new IllegalArgumentException("Unknow script file description");
+    }
+
+    public static final ScriptFileType typeByExt(String extension) {
+        for (ScriptFileType type : values()) {
+            if (type.extension.equals(extension)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown script file extension");
     }
 }

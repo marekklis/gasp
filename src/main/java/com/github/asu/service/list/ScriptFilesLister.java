@@ -1,6 +1,6 @@
 package com.github.asu.service.list;
 
-import org.apache.maven.plugin.MojoExecutionException;
+import com.github.asu.service.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,18 +20,18 @@ public class ScriptFilesLister {
         this.headers = headers;
     }
 
-    public ScriptFiles listFiles(String projectId) throws MojoExecutionException {
+    public ScriptFiles listFiles(String projectId) {
         HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
         ResponseEntity<ScriptFiles> responseEntity =
                 restTemplate.exchange(listPath(projectId), HttpMethod.GET, requestEntity, ScriptFiles.class);
         return responseEntity.getBody();
     }
 
-    private URI listPath(String projectId) throws MojoExecutionException {
+    private URI listPath(String projectId) {
         try {
             return new URI("https://script.google.com/feeds/download/export?id=" + projectId + "&format=json");
         } catch (URISyntaxException e) {
-            throw new MojoExecutionException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

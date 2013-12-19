@@ -1,21 +1,69 @@
 package com.github.asu.service.upload;
 
 import com.github.asu.service.list.ScriptFilesLister;
+import com.github.asu.service.scriptfile.ScriptFile;
+import com.github.asu.service.scriptfile.ScriptFileBuilder;
+import com.github.asu.service.scriptfile.ScriptFileType;
+import com.github.asu.service.scriptfile.ScriptFiles;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScriptFilesUploader {
 
     private RestTemplate restTemplate;
     private ScriptFilesLister lister;
+    private ScriptFileBuilder scriptFileBuilder;
+    private final String projectId;
+    private final HttpHeaders headers;
 
-    public ScriptFilesUploader(RestTemplate restTemplate, ScriptFilesLister lister) {
+    public ScriptFilesUploader(RestTemplate restTemplate, HttpHeaders headers, ScriptFilesLister lister, String projectId,
+                               ScriptFileBuilder scriptFileBuilder) {
         this.restTemplate = restTemplate;
         this.lister = lister;
+        this.projectId = projectId;
+        this.headers = headers;
+        this.scriptFileBuilder = scriptFileBuilder;
     }
 
     public void upload(File sourceDir) {
+        ScriptFiles scriptFiles = lister.listFiles(projectId);
+        List<ScriptFile> toUpload = new ArrayList<ScriptFile>();
+        if (sourceDir.isDirectory()) {
+            for (File file : sourceDir.listFiles()) {
+                ScriptFile scriptFile = scriptFileBuilder.build(file);
+                scriptFile.setId(findId(scriptFiles, scriptFile.getName(), scriptFile.getFileType()));
+                toUpload.add(scriptFile);
+            }
+        }
+        ScriptFiles request = new ScriptFiles();
+        request.setFiles(toUpload);
+        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headers);
+        restTemplate.exchange(uploadPath(projectId), HttpMethod.PUT, requestEntity, String.class);
+    }
 
+    private URI uploadPath(String projectId) {
+        try {
+            return new URI("https://www.googleapis.com/upload/drive/v2/files/" + projectId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    private String findId(ScriptFiles scriptFiles, String name, ScriptFileType type) {
+        for (ScriptFile file : scriptFiles.getFiles()) {
+            if (file.getName().equals(name) && file.getFileType().equals(type)) {
+                return file.getId();
+            }
+        }
+        return "";
     }
 }
