@@ -1,10 +1,10 @@
 package com.github.asu.mojo.list;
 
-import com.github.asu.service.header.HttpHeadersProvider;
-import com.github.asu.service.list.ScriptFilesLister;
-import com.github.asu.service.rest.RestTemplateProvider;
-import com.github.asu.service.scriptfile.ScriptFile;
-import com.github.asu.service.scriptfile.ScriptFiles;
+import com.github.asu.header.HttpHeadersProvider;
+import com.github.asu.list.ScriptFilesLister;
+import com.github.asu.rest.RestTemplateProvider;
+import com.github.asu.scriptfile.ScriptFile;
+import com.github.asu.scriptfile.ScriptFiles;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;

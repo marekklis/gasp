@@ -1,4 +1,4 @@
-package com.github.asu.service.scriptfile;
+package com.github.asu.scriptfile;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 

@@ -1,12 +1,12 @@
-package com.github.asu.service.upload;
+package com.github.asu.upload;
 
-import com.github.asu.service.header.HttpHeadersProvider;
-import com.github.asu.service.list.ScriptFilesLister;
-import com.github.asu.service.rest.RestTemplateProvider;
-import com.github.asu.service.scriptfile.ScriptFile;
-import com.github.asu.service.scriptfile.ScriptFileBuilder;
-import com.github.asu.service.scriptfile.ScriptFileType;
-import com.github.asu.service.scriptfile.ScriptFiles;
+import com.github.asu.header.HttpHeadersProvider;
+import com.github.asu.list.ScriptFilesLister;
+import com.github.asu.rest.RestTemplateProvider;
+import com.github.asu.scriptfile.ScriptFile;
+import com.github.asu.scriptfile.ScriptFileBuilder;
+import com.github.asu.scriptfile.ScriptFileType;
+import com.github.asu.scriptfile.ScriptFiles;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;

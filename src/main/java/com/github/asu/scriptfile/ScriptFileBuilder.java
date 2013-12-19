@@ -1,4 +1,4 @@
-package com.github.asu.service.scriptfile;
+package com.github.asu.scriptfile;
 
 import com.google.common.io.Files;
 

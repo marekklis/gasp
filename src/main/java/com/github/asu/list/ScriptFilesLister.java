@@ -1,8 +1,8 @@
-package com.github.asu.service.list;
+package com.github.asu.list;
 
-import com.github.asu.service.header.HttpHeadersProvider;
-import com.github.asu.service.rest.RestTemplateProvider;
-import com.github.asu.service.scriptfile.ScriptFiles;
+import com.github.asu.header.HttpHeadersProvider;
+import com.github.asu.rest.RestTemplateProvider;
+import com.github.asu.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
