@@ -1,6 +1,6 @@
 package com.github.asu.service.list;
 
-import com.github.asu.service.header.HttpHeaderProvider;
+import com.github.asu.service.header.HttpHeadersProvider;
 import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
@@ -13,9 +13,9 @@ import java.net.URISyntaxException;
 public class ScriptFilesLister {
 
     private RestTemplateProvider restTemplateProvider;
-    private HttpHeaderProvider headersProvider;
+    private HttpHeadersProvider headersProvider;
 
-    public ScriptFilesLister(RestTemplateProvider restTemplateProvider, HttpHeaderProvider headersProvider) {
+    public ScriptFilesLister(RestTemplateProvider restTemplateProvider, HttpHeadersProvider headersProvider) {
         this.restTemplateProvider = restTemplateProvider;
         this.headersProvider = headersProvider;
     }

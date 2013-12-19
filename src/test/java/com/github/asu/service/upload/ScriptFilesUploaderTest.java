@@ -1,6 +1,6 @@
 package com.github.asu.service.upload;
 
-import com.github.asu.service.header.HttpHeaderProvider;
+import com.github.asu.service.header.HttpHeadersProvider;
 import com.github.asu.service.list.ScriptFilesLister;
 import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFile;
@@ -40,7 +40,7 @@ public class ScriptFilesUploaderTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    private HttpHeaderProvider headerProvider;
+    private HttpHeadersProvider headersProvider;
     @Mock
     private ScriptFilesLister filesLister;
     @Mock
@@ -70,7 +70,7 @@ public class ScriptFilesUploaderTest {
     @BeforeMethod
     public void setUp() throws Exception {
         given(restTemplateProvider.provide()).willReturn(restTemplate);
-        given(headerProvider.provide()).willReturn(headers);
+        given(headersProvider.provide()).willReturn(headers);
         given(sourceDir.isDirectory()).willReturn(true);
         given(file1.getName()).willReturn(FILE_1_NAME + "." + FILE_1_TYPE.getExtension());
         given(file2.getName()).willReturn(FILE_2_NAME + "." + FILE_2_TYPE.getExtension());
@@ -78,7 +78,7 @@ public class ScriptFilesUploaderTest {
         scriptFile2 = givenScript(FILE_2_ID, FILE_2_NAME, FILE_2_TYPE);
         given(scriptFileBuilder.build(file1)).willReturn(scriptFile1);
         given(scriptFileBuilder.build(file2)).willReturn(scriptFile2);
-        uploader = new ScriptFilesUploader(restTemplateProvider, headerProvider, filesLister, PROJECT_ID, scriptFileBuilder);
+        uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, filesLister, PROJECT_ID, scriptFileBuilder);
         uploadUri = new URI("https://www.googleapis.com/upload/drive/v2/files/" + PROJECT_ID);
     }
 

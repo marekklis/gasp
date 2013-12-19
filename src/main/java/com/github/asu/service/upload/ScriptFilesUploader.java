@@ -1,6 +1,6 @@
 package com.github.asu.service.upload;
 
-import com.github.asu.service.header.HttpHeaderProvider;
+import com.github.asu.service.header.HttpHeadersProvider;
 import com.github.asu.service.list.ScriptFilesLister;
 import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFile;
@@ -22,14 +22,14 @@ public class ScriptFilesUploader {
     private ScriptFilesLister lister;
     private ScriptFileBuilder scriptFileBuilder;
     private final String projectId;
-    private final HttpHeaderProvider headerProvider;
+    private final HttpHeadersProvider headersProvider;
 
-    public ScriptFilesUploader(RestTemplateProvider restTemplateProvider, HttpHeaderProvider headerProvider, ScriptFilesLister lister, String projectId,
+    public ScriptFilesUploader(RestTemplateProvider restTemplateProvider, HttpHeadersProvider headersProvider, ScriptFilesLister lister, String projectId,
                                ScriptFileBuilder scriptFileBuilder) {
         this.restTemplateProvider = restTemplateProvider;
         this.lister = lister;
         this.projectId = projectId;
-        this.headerProvider = headerProvider;
+        this.headersProvider = headersProvider;
         this.scriptFileBuilder = scriptFileBuilder;
     }
 
@@ -45,7 +45,7 @@ public class ScriptFilesUploader {
         }
         ScriptFiles request = new ScriptFiles();
         request.setFiles(toUpload);
-        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headerProvider.provide());
+        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headersProvider.provide());
         restTemplateProvider.provide().exchange(uploadPath(projectId), HttpMethod.PUT, requestEntity, String.class);
     }
 

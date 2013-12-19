@@ -1,6 +1,6 @@
 package com.github.asu.mojo.list;
 
-import com.github.asu.service.header.HttpHeaderProvider;
+import com.github.asu.service.header.HttpHeadersProvider;
 import com.github.asu.service.list.ScriptFilesLister;
 import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFile;
@@ -19,7 +19,9 @@ public class ListFilesMojo extends AbstractMojo {
     private String accessToken;
 
     public void execute() throws MojoExecutionException {
-        ScriptFilesLister lister = new ScriptFilesLister(new RestTemplateProvider(), new HttpHeaderProvider(accessToken));
+        RestTemplateProvider restTemplateProvider = new RestTemplateProvider();
+        HttpHeadersProvider headersProvider = new HttpHeadersProvider(accessToken);
+        ScriptFilesLister lister = new ScriptFilesLister(restTemplateProvider, headersProvider);
         ScriptFiles files = lister.listFiles(projectId);
         for (ScriptFile file : files.getFiles()) {
             getLog().info(file.getName() + "." + file.getFileType().getExtension());

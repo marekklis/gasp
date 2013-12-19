@@ -1,6 +1,6 @@
 package com.github.asu.service.list;
 
-import com.github.asu.service.header.HttpHeaderProvider;
+import com.github.asu.service.header.HttpHeadersProvider;
 import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFiles;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -33,7 +33,7 @@ public class ScriptFilesListerTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    private HttpHeaderProvider headerProvider;
+    private HttpHeadersProvider headerProvider;
     @Mock
     private HttpHeaders headers;
     @Captor

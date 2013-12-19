@@ -2,11 +2,11 @@ package com.github.asu.service.header;
 
 import org.springframework.http.HttpHeaders;
 
-public class HttpHeaderProvider {
+public class HttpHeadersProvider {
 
     private String accessToken;
 
-    public HttpHeaderProvider(String accessToken) {
+    public HttpHeadersProvider(String accessToken) {
         this.accessToken = accessToken;
     }
 
