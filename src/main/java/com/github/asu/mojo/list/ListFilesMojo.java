@@ -1,7 +1,7 @@
 package com.github.asu.mojo.list;
 
+import com.github.asu.download.ScriptFilesLister;
 import com.github.asu.header.HttpHeadersProvider;
-import com.github.asu.list.ScriptFilesLister;
 import com.github.asu.rest.RestTemplateProvider;
 import com.github.asu.scriptfile.ScriptFile;
 import com.github.asu.scriptfile.ScriptFiles;

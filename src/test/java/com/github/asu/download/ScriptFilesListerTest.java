@@ -1,4 +1,4 @@
-package com.github.asu.list;
+package com.github.asu.download;
 
 import com.github.asu.header.HttpHeadersProvider;
 import com.github.asu.rest.RestTemplateProvider;
