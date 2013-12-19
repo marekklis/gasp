@@ -15,6 +15,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 public class ScriptFilesUploader {
 
     private RestTemplateProvider restTemplateProvider;
@@ -34,7 +36,7 @@ public class ScriptFilesUploader {
     }
 
     public void upload(File sourceDir, List<String> ignoredFiles) {
-//        checkArgument(sourceDir.isDirectory(), "downloadDir is not a directory");
+        checkArgument(sourceDir.isDirectory(), "sourceDir is not a directory");
         ScriptFiles scriptFiles = downloader.download(projectId);
         List<ScriptFile> filesToUpload = new ArrayList<ScriptFile>();
         filesToUpload.addAll(prepareFilesToUpload(sourceDir, ignoredFiles, scriptFiles));

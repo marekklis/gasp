@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -159,6 +160,20 @@ public class ScriptFilesUploaderTest {
         // then
         verify(scriptFileBuilder).build(file1);
         verify(scriptFileBuilder, never()).build(file2);
+    }
+
+    @Test
+    public void shouldThrownExceptionIfSourceDirIsNotDirectory() {
+        // given
+        given(sourceDir.isDirectory()).willReturn(false);
+        try {
+            // when
+            uploader.upload(sourceDir, ignoredFiles);
+            Assert.fail("IllegalArgumentException should have been thrown");
+        } catch (IllegalArgumentException exception) {
+            // then
+            assertEquals(exception.getMessage(), "sourceDir is not a directory");
+        }
     }
 
     private File[] files(File... files) {
