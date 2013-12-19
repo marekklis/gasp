@@ -12,7 +12,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -91,7 +90,7 @@ public class ScriptFilesUploaderTest {
         uploader.upload(sourceDir);
         // then
         verify(downloader).download(PROJECT_ID);
-        verify(restTemplate).exchange(eq(uploadUri), eq(HttpMethod.PUT), requestCaptor.capture(), eq(String.class));
+        verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
         assertEquals(files.size(), 2);
@@ -112,7 +111,7 @@ public class ScriptFilesUploaderTest {
         uploader.upload(sourceDir);
         // then
         verify(downloader).download(PROJECT_ID);
-        verify(restTemplate).exchange(eq(uploadUri), eq(HttpMethod.PUT), requestCaptor.capture(), eq(String.class));
+        verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
         assertEquals(files.size(), 1);

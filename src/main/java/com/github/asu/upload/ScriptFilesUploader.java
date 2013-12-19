@@ -8,7 +8,6 @@ import com.github.asu.scriptfile.ScriptFileBuilder;
 import com.github.asu.scriptfile.ScriptFileType;
 import com.github.asu.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 
 import java.io.File;
 import java.net.URI;
@@ -47,7 +46,7 @@ public class ScriptFilesUploader {
         ScriptFiles request = new ScriptFiles();
         request.setFiles(toUpload);
         HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headersProvider.provide());
-        restTemplateProvider.provide().exchange(uploadPath(projectId), HttpMethod.PUT, requestEntity, String.class);
+        restTemplateProvider.provide().put(uploadPath(projectId), requestEntity);
     }
 
     private URI uploadPath(String projectId) {
