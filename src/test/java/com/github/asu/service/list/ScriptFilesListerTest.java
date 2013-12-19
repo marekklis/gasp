@@ -4,25 +4,65 @@ import com.github.asu.service.header.HttpHeaderProvider;
 import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFiles;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.springframework.http.HttpHeaders;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import testng.MockitoTestNGListener;
 
+import java.net.URI;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
 
+@Listeners({MockitoTestNGListener.class})
 public class ScriptFilesListerTest {
 
-    @Test(enabled = false)
-    public void shouldListProjectFiles() throws MojoExecutionException {
+    @InjectMocks
+    private ScriptFilesLister lister;
+    @Mock
+    private RestTemplateProvider restTemplateProvider;
+    @Mock
+    private RestTemplate restTemplate;
+    @Mock
+    private HttpHeaderProvider headerProvider;
+    @Mock
+    private HttpHeaders headers;
+    @Captor
+    private ArgumentCaptor<HttpEntity<String>> requestCaptor;
+
+    private static final String PROJECT_ID = "project_id";
+    private static final ScriptFiles SCRIPT_FILES = new ScriptFiles();
+    private URI downloadUri;
+
+    @BeforeMethod
+    public void setUp() throws Exception {
+        given(restTemplateProvider.provide()).willReturn(restTemplate);
+        given(headerProvider.provide()).willReturn(headers);
+        downloadUri = new URI("https://script.google.com/feeds/download/export?id=" + PROJECT_ID + "&format=json");
+    }
+
+    @Test
+    public void shouldCallDownloadDriveAPI() throws MojoExecutionException {
         // given
-        String accessToken = "ya29.1.AADtN_UwXi2p4kXAcBlQZJrB9BUyNJQIiECO0lTj4z3g_OdBUYqumG6V6JUwNJtbCMyv2w";
-        String projectId = "17C2Ddo_wUSKlqJUqACWsSGSVgbw4aZFod5ggvRiudl57dJF02V5VK2BI";
-        RestTemplate restTemplate = new RestTemplateProvider().provide();
-        HttpHeaders headers = new HttpHeaderProvider(accessToken).provide();
-        ScriptFilesLister lister = new ScriptFilesLister(restTemplate, headers);
+        given(restTemplate.exchange(eq(downloadUri), eq(HttpMethod.GET), any(HttpEntity.class), eq(ScriptFiles.class))).willReturn(responseWithBody(SCRIPT_FILES));
         // when
-        ScriptFiles files = lister.listFiles(projectId);
+        ScriptFiles files = lister.listFiles(PROJECT_ID);
         // then
-        assertEquals(files.getFiles().size(), 21);
+        verify(restTemplate).exchange(eq(downloadUri), eq(HttpMethod.GET), requestCaptor.capture(), eq(ScriptFiles.class));
+        assertEquals(requestCaptor.getValue().getHeaders(), headers);
+        assertEquals(files, SCRIPT_FILES);
+    }
+
+    private ResponseEntity<ScriptFiles> responseWithBody(ScriptFiles scriptFiles) {
+        return new ResponseEntity<ScriptFiles>(scriptFiles, HttpStatus.OK);
     }
 }

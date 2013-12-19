@@ -1,14 +1,14 @@
 package com.github.asu.service.upload;
 
+import com.github.asu.service.header.HttpHeaderProvider;
 import com.github.asu.service.list.ScriptFilesLister;
+import com.github.asu.service.rest.RestTemplateProvider;
 import com.github.asu.service.scriptfile.ScriptFile;
 import com.github.asu.service.scriptfile.ScriptFileBuilder;
 import com.github.asu.service.scriptfile.ScriptFileType;
 import com.github.asu.service.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.net.URI;
@@ -18,18 +18,18 @@ import java.util.List;
 
 public class ScriptFilesUploader {
 
-    private RestTemplate restTemplate;
+    private RestTemplateProvider restTemplateProvider;
     private ScriptFilesLister lister;
     private ScriptFileBuilder scriptFileBuilder;
     private final String projectId;
-    private final HttpHeaders headers;
+    private final HttpHeaderProvider headerProvider;
 
-    public ScriptFilesUploader(RestTemplate restTemplate, HttpHeaders headers, ScriptFilesLister lister, String projectId,
+    public ScriptFilesUploader(RestTemplateProvider restTemplateProvider, HttpHeaderProvider headerProvider, ScriptFilesLister lister, String projectId,
                                ScriptFileBuilder scriptFileBuilder) {
-        this.restTemplate = restTemplate;
+        this.restTemplateProvider = restTemplateProvider;
         this.lister = lister;
         this.projectId = projectId;
-        this.headers = headers;
+        this.headerProvider = headerProvider;
         this.scriptFileBuilder = scriptFileBuilder;
     }
 
@@ -45,8 +45,8 @@ public class ScriptFilesUploader {
         }
         ScriptFiles request = new ScriptFiles();
         request.setFiles(toUpload);
-        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headers);
-        restTemplate.exchange(uploadPath(projectId), HttpMethod.PUT, requestEntity, String.class);
+        HttpEntity<ScriptFiles> requestEntity = new HttpEntity<ScriptFiles>(request, headerProvider.provide());
+        restTemplateProvider.provide().exchange(uploadPath(projectId), HttpMethod.PUT, requestEntity, String.class);
     }
 
     private URI uploadPath(String projectId) {

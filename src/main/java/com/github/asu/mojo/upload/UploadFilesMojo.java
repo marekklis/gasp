@@ -9,8 +9,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 
@@ -25,11 +23,9 @@ public class UploadFilesMojo extends AbstractMojo {
     private String accessToken;
 
     public void execute() throws MojoExecutionException {
-        RestTemplate restTemplate = new RestTemplateProvider().provide();
-        HttpHeaders httpHeaders = new HttpHeaderProvider(accessToken).provide();
-        ScriptFilesLister filesLister = new ScriptFilesLister(restTemplate, httpHeaders);
+        ScriptFilesLister filesLister = new ScriptFilesLister(new RestTemplateProvider(), new HttpHeaderProvider(accessToken));
         ScriptFileBuilder scriptFileBuilder = new ScriptFileBuilder();
-        ScriptFilesUploader uploader = new ScriptFilesUploader(restTemplate, httpHeaders, filesLister, projectId, scriptFileBuilder);
+        ScriptFilesUploader uploader = new ScriptFilesUploader(new RestTemplateProvider(), new HttpHeaderProvider(accessToken), filesLister, projectId, scriptFileBuilder);
         uploader.upload(scriptsDir);
     }
 }

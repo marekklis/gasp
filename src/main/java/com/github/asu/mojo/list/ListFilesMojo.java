@@ -9,8 +9,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestTemplate;
 
 @Mojo(name = "list")
 public class ListFilesMojo extends AbstractMojo {
@@ -21,9 +19,7 @@ public class ListFilesMojo extends AbstractMojo {
     private String accessToken;
 
     public void execute() throws MojoExecutionException {
-        RestTemplate restTemplate = new RestTemplateProvider().provide();
-        HttpHeaders httpHeaders = new HttpHeaderProvider(accessToken).provide();
-        ScriptFilesLister lister = new ScriptFilesLister(restTemplate, httpHeaders);
+        ScriptFilesLister lister = new ScriptFilesLister(new RestTemplateProvider(), new HttpHeaderProvider(accessToken));
         ScriptFiles files = lister.listFiles(projectId);
         for (ScriptFile file : files.getFiles()) {
             getLog().info(file.getName() + "." + file.getFileType().getExtension());
