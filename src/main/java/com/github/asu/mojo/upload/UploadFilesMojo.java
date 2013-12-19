@@ -1,6 +1,6 @@
 package com.github.asu.mojo.upload;
 
-import com.github.asu.download.ScriptFilesLister;
+import com.github.asu.download.ScriptFilesDownloader;
 import com.github.asu.header.HttpHeadersProvider;
 import com.github.asu.rest.RestTemplateProvider;
 import com.github.asu.scriptfile.ScriptFileBuilder;
@@ -25,9 +25,9 @@ public class UploadFilesMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         RestTemplateProvider restTemplateProvider = new RestTemplateProvider();
         HttpHeadersProvider headersProvider = new HttpHeadersProvider(accessToken);
-        ScriptFilesLister filesLister = new ScriptFilesLister(restTemplateProvider, headersProvider);
+        ScriptFilesDownloader downloader = new ScriptFilesDownloader(restTemplateProvider, headersProvider);
         ScriptFileBuilder scriptFileBuilder = new ScriptFileBuilder();
-        ScriptFilesUploader uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, filesLister, projectId, scriptFileBuilder);
+        ScriptFilesUploader uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, downloader, projectId, scriptFileBuilder);
         uploader.upload(scriptsDir);
     }
 }

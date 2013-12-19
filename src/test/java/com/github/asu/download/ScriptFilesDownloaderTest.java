@@ -24,10 +24,10 @@ import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
 
 @Listeners({MockitoTestNGListener.class})
-public class ScriptFilesListerTest {
+public class ScriptFilesDownloaderTest {
 
     @InjectMocks
-    private ScriptFilesLister lister;
+    private ScriptFilesDownloader downloader;
     @Mock
     private RestTemplateProvider restTemplateProvider;
     @Mock
@@ -55,7 +55,7 @@ public class ScriptFilesListerTest {
         // given
         given(restTemplate.exchange(eq(downloadUri), eq(HttpMethod.GET), any(HttpEntity.class), eq(ScriptFiles.class))).willReturn(responseWithBody(SCRIPT_FILES));
         // when
-        ScriptFiles files = lister.listFiles(PROJECT_ID);
+        ScriptFiles files = downloader.download(PROJECT_ID);
         // then
         verify(restTemplate).exchange(eq(downloadUri), eq(HttpMethod.GET), requestCaptor.capture(), eq(ScriptFiles.class));
         assertEquals(requestCaptor.getValue().getHeaders(), headers);

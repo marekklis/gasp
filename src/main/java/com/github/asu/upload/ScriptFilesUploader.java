@@ -1,6 +1,6 @@
 package com.github.asu.upload;
 
-import com.github.asu.download.ScriptFilesLister;
+import com.github.asu.download.ScriptFilesDownloader;
 import com.github.asu.header.HttpHeadersProvider;
 import com.github.asu.rest.RestTemplateProvider;
 import com.github.asu.scriptfile.ScriptFile;
@@ -19,22 +19,23 @@ import java.util.List;
 public class ScriptFilesUploader {
 
     private RestTemplateProvider restTemplateProvider;
-    private ScriptFilesLister lister;
+    private ScriptFilesDownloader downloader;
     private ScriptFileBuilder scriptFileBuilder;
     private final String projectId;
     private final HttpHeadersProvider headersProvider;
 
-    public ScriptFilesUploader(RestTemplateProvider restTemplateProvider, HttpHeadersProvider headersProvider, ScriptFilesLister lister, String projectId,
+    public ScriptFilesUploader(RestTemplateProvider restTemplateProvider, HttpHeadersProvider headersProvider,
+                               ScriptFilesDownloader downloader, String projectId,
                                ScriptFileBuilder scriptFileBuilder) {
         this.restTemplateProvider = restTemplateProvider;
-        this.lister = lister;
+        this.downloader = downloader;
         this.projectId = projectId;
         this.headersProvider = headersProvider;
         this.scriptFileBuilder = scriptFileBuilder;
     }
 
     public void upload(File sourceDir) {
-        ScriptFiles scriptFiles = lister.listFiles(projectId);
+        ScriptFiles scriptFiles = downloader.download(projectId);
         List<ScriptFile> toUpload = new ArrayList<ScriptFile>();
         if (sourceDir.isDirectory()) {
             for (File file : sourceDir.listFiles()) {

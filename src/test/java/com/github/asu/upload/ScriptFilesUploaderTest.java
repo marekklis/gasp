@@ -1,6 +1,6 @@
 package com.github.asu.upload;
 
-import com.github.asu.download.ScriptFilesLister;
+import com.github.asu.download.ScriptFilesDownloader;
 import com.github.asu.header.HttpHeadersProvider;
 import com.github.asu.rest.RestTemplateProvider;
 import com.github.asu.scriptfile.ScriptFile;
@@ -42,7 +42,7 @@ public class ScriptFilesUploaderTest {
     @Mock
     private HttpHeadersProvider headersProvider;
     @Mock
-    private ScriptFilesLister filesLister;
+    private ScriptFilesDownloader downloader;
     @Mock
     private File sourceDir;
     @Mock
@@ -78,19 +78,19 @@ public class ScriptFilesUploaderTest {
         scriptFile2 = givenScript(FILE_2_ID, FILE_2_NAME, FILE_2_TYPE);
         given(scriptFileBuilder.build(file1)).willReturn(scriptFile1);
         given(scriptFileBuilder.build(file2)).willReturn(scriptFile2);
-        uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, filesLister, PROJECT_ID, scriptFileBuilder);
+        uploader = new ScriptFilesUploader(restTemplateProvider, headersProvider, downloader, PROJECT_ID, scriptFileBuilder);
         uploadUri = new URI("https://www.googleapis.com/upload/drive/v2/files/" + PROJECT_ID);
     }
 
     @Test
     public void shouldUploadExistingFiles() throws URISyntaxException {
         // given
-        given(filesLister.listFiles(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
+        given(downloader.download(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
         given(sourceDir.listFiles()).willReturn(files(file1, file2));
         // when
         uploader.upload(sourceDir);
         // then
-        verify(filesLister).listFiles(PROJECT_ID);
+        verify(downloader).download(PROJECT_ID);
         verify(restTemplate).exchange(eq(uploadUri), eq(HttpMethod.PUT), requestCaptor.capture(), eq(String.class));
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
@@ -106,12 +106,12 @@ public class ScriptFilesUploaderTest {
     @Test
     public void shouldUploadNotExistingFileWithEmptyId() throws URISyntaxException {
         // given
-        given(filesLister.listFiles(PROJECT_ID)).willReturn(givenScripts(new ArrayList<ScriptFile>()));
+        given(downloader.download(PROJECT_ID)).willReturn(givenScripts(new ArrayList<ScriptFile>()));
         given(sourceDir.listFiles()).willReturn(files(file1));
         // when
         uploader.upload(sourceDir);
         // then
-        verify(filesLister).listFiles(PROJECT_ID);
+        verify(downloader).download(PROJECT_ID);
         verify(restTemplate).exchange(eq(uploadUri), eq(HttpMethod.PUT), requestCaptor.capture(), eq(String.class));
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
