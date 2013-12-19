@@ -1,6 +1,5 @@
 package testng;
 
-import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -35,7 +34,7 @@ public class MockitoAfterTestNGMethod {
     @SuppressWarnings({"unchecked", "deprecation"})
     private Collection<Object> instanceMocksOf(Object instance) {
         return Fields.allDeclaredFieldsOf(instance)
-                .filter(annotatedBy(Mock.class, Spy.class, MockitoAnnotations.Mock.class, ReplaceWithMock.class)).notNull().assignedValues();
+                .filter(annotatedBy(Mock.class, Spy.class, MockitoAnnotations.Mock.class)).notNull().assignedValues();
     }
 
     @SuppressWarnings("unused")
