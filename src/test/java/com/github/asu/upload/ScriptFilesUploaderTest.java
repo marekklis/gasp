@@ -9,6 +9,7 @@ import com.github.asu.scriptfile.ScriptFileType;
 import com.github.asu.scriptfile.ScriptFiles;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +28,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
 @Listeners({MockitoTestNGListener.class})
@@ -87,6 +87,19 @@ public class ScriptFilesUploaderTest {
     }
 
     @Test
+    public void shouldDownloadScriptsBeforeUploading() {
+        // given
+        given(downloader.download(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
+        given(sourceDir.listFiles()).willReturn(files(file1, file2));
+        // when
+        uploader.upload(sourceDir, ignoredFiles);
+        // then
+        InOrder inOrder = inOrder(downloader, restTemplate);
+        inOrder.verify(downloader).download(PROJECT_ID);
+        inOrder.verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
+    }
+
+    @Test
     public void shouldUploadExistingFiles() {
         // given
         given(downloader.download(PROJECT_ID)).willReturn(givenScripts(newArrayList(scriptFile1, scriptFile2)));
@@ -94,7 +107,6 @@ public class ScriptFilesUploaderTest {
         // when
         uploader.upload(sourceDir, ignoredFiles);
         // then
-        verify(downloader).download(PROJECT_ID);
         verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
@@ -115,7 +127,6 @@ public class ScriptFilesUploaderTest {
         // when
         uploader.upload(sourceDir, ignoredFiles);
         // then
-        verify(downloader).download(PROJECT_ID);
         verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
@@ -134,7 +145,6 @@ public class ScriptFilesUploaderTest {
         // when
         uploader.upload(sourceDir, ignoredFiles);
         // then
-        verify(downloader).download(PROJECT_ID);
         verify(restTemplate).put(eq(uploadUri), requestCaptor.capture());
         ScriptFiles request = requestCaptor.getValue().getBody();
         List<ScriptFile> files = request.getFiles();
