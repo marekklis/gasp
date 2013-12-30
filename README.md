@@ -10,8 +10,8 @@ Setting up
 - go to https://developers.google.com/oauthplayground/
 - Step 1: Select & authorize APIs
   - choose from Drive API: drive, drive.file, drive.scripts
-- Click Authorize APIs
-- Choose an account (login)
+  - Click Authorize APIs
+  - Choose an account (login)
 - Step 2: Exchange authorization code for tokens
   - click ``Exchange authorization code for tokens``
   - copy Access Token; if access token expired click ``Refresh access token`` and copy again
