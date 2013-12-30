@@ -22,7 +22,7 @@ Setting up
 <plugin>
   <groupId>gasp</groupId>
     <artifactId>gasp-maven-plugin</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
 	<configuration>
 	  <scriptsDir>${basedir}\src\main\resources</scriptsDir>
 	  <downloadDir>${basedir}\backup</downloadDir>
