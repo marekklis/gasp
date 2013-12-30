@@ -37,7 +37,17 @@ Setting up
 - ```scriptsDir``` source directory with script files to uploading
 - ```downloadDir``` directory to download script files
 - ```projectId``` apps script project ID
-- ```ignoredFiles``` list of ignored fi on uploading
+- ```ignoredFiles``` list of ignored files on uploading
+
+Add plugin repository (if necessary):
+```
+<pluginRepositories>
+  <pluginRepository>
+    <id>gasp-mvn-repo</id>
+    <url>https://github.com/marekklis/gasp/raw/mvn_repo/</url>
+  </pluginRepository>
+</pluginRepositories>
+```
 
 ### Listing project files
 ``` mvn gasp:list -DaccessToken=ya29.1access_token_copied_from_oauthplaygrand ```
