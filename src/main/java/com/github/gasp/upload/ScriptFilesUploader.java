@@ -1,12 +1,12 @@
-package com.github.asu.upload;
+package com.github.gasp.upload;
 
-import com.github.asu.download.ScriptFilesDownloader;
-import com.github.asu.header.HttpHeadersProvider;
-import com.github.asu.rest.RestTemplateProvider;
-import com.github.asu.scriptfile.ScriptFile;
-import com.github.asu.scriptfile.ScriptFileBuilder;
-import com.github.asu.scriptfile.ScriptFileType;
-import com.github.asu.scriptfile.ScriptFiles;
+import com.github.gasp.download.ScriptFilesDownloader;
+import com.github.gasp.header.HttpHeadersProvider;
+import com.github.gasp.rest.RestTemplateProvider;
+import com.github.gasp.scriptfile.ScriptFile;
+import com.github.gasp.scriptfile.ScriptFileBuilder;
+import com.github.gasp.scriptfile.ScriptFileType;
+import com.github.gasp.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
 
 import java.io.File;

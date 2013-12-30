@@ -1,8 +1,8 @@
-package com.github.asu.download;
+package com.github.gasp.download;
 
-import com.github.asu.header.HttpHeadersProvider;
-import com.github.asu.rest.RestTemplateProvider;
-import com.github.asu.scriptfile.ScriptFiles;
+import com.github.gasp.header.HttpHeadersProvider;
+import com.github.gasp.rest.RestTemplateProvider;
+import com.github.gasp.scriptfile.ScriptFiles;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

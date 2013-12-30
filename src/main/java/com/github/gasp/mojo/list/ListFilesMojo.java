@@ -1,10 +1,10 @@
-package com.github.asu.mojo.list;
+package com.github.gasp.mojo.list;
 
-import com.github.asu.download.ScriptFilesDownloader;
-import com.github.asu.header.HttpHeadersProvider;
-import com.github.asu.rest.RestTemplateProvider;
-import com.github.asu.scriptfile.ScriptFile;
-import com.github.asu.scriptfile.ScriptFiles;
+import com.github.gasp.download.ScriptFilesDownloader;
+import com.github.gasp.header.HttpHeadersProvider;
+import com.github.gasp.rest.RestTemplateProvider;
+import com.github.gasp.scriptfile.ScriptFile;
+import com.github.gasp.scriptfile.ScriptFiles;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;

@@ -1,4 +1,4 @@
-package com.github.asu.rest;
+package com.github.gasp.rest;
 
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;

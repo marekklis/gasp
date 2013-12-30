@@ -1,4 +1,4 @@
-package com.github.asu.scriptfile;
+package com.github.gasp.scriptfile;
 
 import com.google.common.io.Files;
 import org.testng.annotations.AfterMethod;

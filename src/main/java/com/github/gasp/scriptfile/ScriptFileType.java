@@ -1,4 +1,4 @@
-package com.github.asu.scriptfile;
+package com.github.gasp.scriptfile;
 
 public enum ScriptFileType {
 
