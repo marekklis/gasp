@@ -4,7 +4,7 @@
 
     <groupId>gasp</groupId>
     <artifactId>gasp-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Google Apps Script Plugin</name>
@@ -68,7 +68,7 @@
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <goalPrefix>gasp-maven-plugin</goalPrefix>
+                    <goalPrefix>gasp</goalPrefix>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
                 <executions>
