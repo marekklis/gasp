@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>asu</groupId>
-    <artifactId>asu-maven-plugin</artifactId>
+    <groupId>gasp</groupId>
+    <artifactId>gasp-maven-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>Apps Scripts Uploader</name>
-    <url>http://maven.apache.org</url>
+    <name>Google Apps Script Plugin</name>
+    <url>https://github.com/marekklis/gasp</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,7 +68,7 @@
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <goalPrefix>asu-maven-plugin</goalPrefix>
+                    <goalPrefix>gasp-maven-plugin</goalPrefix>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
                 <executions>
