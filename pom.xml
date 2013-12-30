@@ -2,23 +2,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>asu</groupId>
-    <artifactId>asu-maven-plugin</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <groupId>gasp</groupId>
+    <artifactId>gasp-maven-plugin</artifactId>
+    <version>0.1</version>
     <packaging>maven-plugin</packaging>
 
-    <name>Apps Scripts Uploader</name>
-    <url>http://maven.apache.org</url>
+    <name>Google Apps Script Plugin</name>
+    <url>https://github.com/marekklis/gasp</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <!--REST Template-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>org.springframework.web</artifactId>
             <version>3.2.0.RELEASE</version>
+        </dependency>
+        <!-- Jackson (for JSON mappings in Spring MVC) -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>15.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -39,6 +51,12 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
